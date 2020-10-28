@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+{% set color_entity_dir = 
+	{
+		'' : '',
+		'机械' : 'blue',
+		'结构' : 'red',
+	} 
+%}
+{% set color_relation_dir = 
+	{
+		'' : '',
+		'建造' : 'blue'
+	} 
+%}
+
+
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta charset="utf-8" />
+	<title>TunnelKG</title>
+	<link rel="stylesheet" type="text/css" href="/static/style.css" />
+</head>
+
+<body>
+	<div class="header">
+		隧道知识图谱
+	</div>
+	<div class="search-bar" >
+		<form action="/process/" method="GET" >
+			<input 
+			name="input"
+			type="text"
+			placeholder="请输入一个句子。"
+			value="{{ input }}" />
+			<input type="submit" value="处理" />
+		</form>
+	</div>
+	<main>
+		{% if entities %}
+		<h1>实体</h1>
+		<div id="sentence">
+			{% for entity in entities %}
+			{% set color = color_entity_dir[entity[1]] %}
+			<div class="entity {{ color }}">
+				<div class="entity-word {% if entity[1] %} mask {% endif %}">
+					{{ entity[0] }}
+				</div>
+				<div class="entity-cat {{ color }}">{{ entity[1] }}</div>
+			</div>
+			{% endfor %}
+			<div class="clear"></div>
+		</div>
+		<h1>关系</h1>
+		{% for relation in relations %}
+		{% set lval = entities[relation[1]][0] %}
+		{% set rval = entities[relation[2]][0] %}
+		{% set lval_color = color_entity_dir[entities[relation[1]][1]] %}
+		{% set rval_color = color_entity_dir[entities[relation[2]][1]] %}
+		<div class="relation">
+			<div class="mask {{ lval_color }}">
+				<div class="relation-left-word">{{ lval }}</div>
+			</div>
+			<div class="relation-cat blue">{{ relation[0] }}</div>
+			<div class="mask {{ rval_color }}">
+				<div class="relation-right-word">{{ rval }}</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+		{% endfor %}
+		{% else %}
+		<h1>Please Input String</h1>
+		{% endif %}
+	</main>
+</body>
+
+</html>

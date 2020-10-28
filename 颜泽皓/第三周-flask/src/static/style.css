@@ -1,0 +1,121 @@
+body {
+	background-color: #fafff0;
+	color: #800;
+	font-family: "Source Han Serif";
+	margin: 0;
+}
+
+/* color options */
+.blue,
+.cyan,
+.red,
+.yellow {
+	color: white;
+}
+
+.blue {
+	background-color: #41b6e6;
+}
+
+.cyan {
+	background-color: #001871;
+}
+
+.red {
+	background-color: #ff585d;
+}
+
+.yellow {
+	background-color: #ffb549;
+}
+
+.mask {
+	background-color: rgba(255, 255, 255, 80%);
+}
+
+/* clear float */
+.clear {
+	clear: both;
+}
+
+/* header */
+.header {
+	background-color: wheat;
+	box-shadow: 0 20vh 5px calc(10px - 20vh) black;
+	font-weight: bold;
+	font-size: 4rem;
+	height: calc(20vh - 1.2rem);
+	left: 0;
+	right: 0;
+	padding: 0.5rem 0 0.7rem 0;
+	position: fixed;
+	text-align: center;
+	top: 0;
+}
+
+/* search-bar */
+.search-bar {
+	background-color:  #800;
+	border-radius: 10px;
+	color: white;
+	height: 3rem;
+	left: 20vw;
+	right: 20vw;
+	position: fixed;
+	text-align: center;
+	top: calc(20vh - 1.5rem);
+}
+
+input {
+	background-color: rgba(0, 0, 0, 0);
+	color: white;
+	height: 1.5rem;
+	font: 1.5rem "Source Han Serif";
+	margin: calc(1.5rem / 2 - 5px);
+}
+
+input[type="text"] {
+	border: medium solid white;
+	border-width: 0 0 1px 0;
+	width: 50vw;
+}
+
+input[type="submit"] {
+	border: none;
+	width: 5vw;
+	height: auto;
+}
+
+/* main */
+main {
+	margin: calc(20vh + 2rem) 5% 0 5%;
+}
+
+.entity,
+.relation div {
+	float: left;
+	height: max-content;
+	text-align: center;
+	width: auto;
+}
+
+.relation-cat {
+	margin: auto 0;
+}
+
+[class*="word"] {
+	color: black;
+	font-weight: 300;
+	font-size: 1.5rem;
+	padding: 0 4px;
+	width: max-content;
+}
+
+[class*="cat"] {
+	font-family: "Source Han Serif CN";
+	font-size: 0.9rem;
+	font-weight: bold;
+	letter-spacing: 0.3rem;
+	padding-left: 0.3rem;
+	text-align: center;
+}
