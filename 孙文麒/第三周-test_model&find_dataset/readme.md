@@ -63,5 +63,6 @@
 ## 3 TODO
 
 * 寻找可用linux环境 用于跑上周剩余两个项目
+  * 重点跑中文
 * 对[bert_slot_tagging](https://github.com/Nntraveler/bert_slot_tagging)仓库进行修改，进行一系列探索性试验
 
