@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>TunnelKG</title>
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/static/style.css" />
+    <script src="/static/js/script.js" type="module"></script>
+</head>
+
+<body>
+    <div class="header">
+        隧道知识图谱
+    </div>
+    <div class="search-bar">
+        <form id="sentence-input" method="post" action="">
+            <input name="input" type="text" placeholder="请输入一个句子。" />
+            <input id="input-submit" type="submit" value="处理" />
+        </form>
+    </div>
+    <main>
+        <div id="sentence">
+            <h1>实体识别</h1>
+            <div id="words">输入句子并点击“处理”以获得实体识别。</div>
+            <div id="most-unrelated">最不相关实体<div>--</div>
+            </div>
+        </div>
+
+        <div id="selected-entity" class="horiz">
+            <div>实体词</div>
+        </div>
+        <div id="related-words">
+            <h1>相关词</h1>
+            鼠标悬停于实体上以显示详细信息。
+        </div>
+        <div id="relations">
+            <h1>关系</h1>
+            鼠标悬停于实体上以显示详细信息。
+        </div>
+        <div class="clear"></div>
+    </main>
+</body>
+
+</html>

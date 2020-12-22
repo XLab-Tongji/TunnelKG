@@ -1,0 +1,222 @@
+:root {
+    --color-accent: #eb9f9f;
+    --color-second-accent: #eb9f9f;
+    --color-accent-background: #f6e6b8;
+    --color-background: #f8ecc9;
+    --color-primary: #a79c8e;
+    --color-second-primary: #b8afa4;
+    --height-header: 15vh;
+    --height-searchbar: 3rem;
+    --height-h1: 5rem;
+    --width-h1-border: 2px;
+
+    font-family: "Source Han Serif";
+}
+
+body {
+    background-color: var(--color-primary);
+    color: var(--color-primary);
+    margin: 0;
+}
+
+/* clear float */
+.clear {
+    clear: both;
+}
+
+/* header */
+.header {
+    --height-text: 4rem;
+    --text-overlap: calc(0.1 * var(--height-text));
+
+    background-color: var(--color-background);
+    font-weight: bold;
+    font-size: var(--height-text);
+    height: calc(var(--height-text) + var(--height-searchbar) / 2 - var(--text-overlap));
+    left: 0;
+    line-height: var(--height-text);
+    right: 0;
+    padding-top:
+        calc(var(--height-header) - var(--height-text) - var(--height-searchbar) / 2 + var(--text-overlap));
+    position: fixed;
+    text-align: center;
+    top: 0;
+}
+
+/* search-bar */
+.search-bar {
+    background-color: var(--color-primary);
+    border-radius: 10px;
+    color: #FFF;
+    height: var(--height-searchbar);
+    left: 20vw;
+    right: 20vw;
+    position: fixed;
+    text-align: center;
+    top: calc(var(--height-header) - var(--height-searchbar) / 2);
+}
+
+input {
+    --height-text: calc(var(--height-searchbar) / 2);
+
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--color-background);
+    font-family: "Source Han Serif";
+    font-size: var(--height-text);
+    line-height: var(--height-text);
+    height: var(--height-text);
+    margin: calc(var(--height-text) / 2) 0;
+}
+
+input[type="text"] {
+    border-bottom: medium solid var(--color-background);
+    border-width: 0 0 1px 0;
+    width: 50vw;
+}
+
+input[type="text"]::placeholder {
+    color: var(--color-second-primary);
+}
+
+input[type="submit"] {
+    border: none;
+    width: 5vw;
+    height: auto;
+}
+
+/* main */
+main {
+    margin: calc(var(--height-header) + var(--height-searchbar)) 5% 0 5%;
+}
+
+h1 {
+    --margin: 1rem;
+
+    border-bottom: rgba(0, 0, 0, 0.2) solid var(--width-h1-border);
+    font-size: 2rem;
+    line-height: calc(var(--height-h1) - var(--width-h1-border) - 2 * var(--margin));
+    margin: var(--margin) 0;
+    text-align: center;
+}
+
+main > div:not(.clear) {
+    --height-main-div: calc(100vh - var(--height-header) - 2 * var(--height-searchbar));
+    --padding-horiz: 1px;
+
+    padding: var(--padding-horiz) 1rem;
+    float: left;
+    height: calc(var(--height-main-div) - 2 * var(--padding-horiz));
+}
+
+#sentence {
+    background-color: var(--color-background);
+    width: calc(40% - 2rem);
+
+    --most-unrelated-height: 3rem;
+}
+
+#selected-entity {
+    --text-height: 3rem;
+    --padding-horiz: 1rem;
+    --width: 4rem;
+
+    background-color: var(--color-background);
+    font-size: var(--text-height);
+    font-weight: bold;
+    line-height: var(--text-height);
+    height: calc(var(--height-main-div) - 2 * var(--padding-horiz));
+    margin-left: calc(10% - var(--width));
+    padding: var(--padding-horiz) 0;
+    width: var(--width);
+    writing-mode: vertical-rl;
+}
+
+.horiz div {
+    float: right;
+    font-size: 2rem;
+    line-height: 2rem;
+}
+
+#related-words {
+    background-color: var(--color-accent-background);
+    width: calc(20% - 4rem);
+}
+
+#relations {
+    background-color: var(--color-background);
+    width: calc(30% - 2rem);
+}
+
+/* sentence */
+#words {
+    height: calc(var(--height-main-div) - var(--height-h1) - var(--most-unrelated-height));
+    overflow-y: auto;
+}
+
+#most-unrelated {
+    border-top: rgba(0, 0, 0, 0.2) solid var(--width-h1-border);
+    font-size: 1rem;
+    line-height: var(--most-unrelated-height);
+}
+
+#most-unrelated div {
+    font-size: 2rem;
+    font-weight: bold;
+    float: right;
+}
+
+.word,
+.word-block {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.word-block {
+    float: left;
+    text-align: center;
+    width: auto;
+}
+
+.word {
+    color: var(--color-second-primary);
+    display: inline-block;
+}
+
+[class="word-cat"] {
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+    line-height: 1rem;
+    height: 1rem;
+    padding-left: 0.1rem;
+    width: calc(100% - 0.1rem);
+    text-align: center;
+}
+
+.entity {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+/* related words, relations */
+
+table {
+    width: 100%;
+}
+
+.relation, 
+.relativity {
+    text-align: right;
+}
+
+.related-word {
+    background-color: var(--color-primary);
+    border-radius: 1.2rem;
+    color: var(--color-background);
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: "Source Han Sans CN";
+    height: 1.2rem;
+    padding: 0 0.6rem 0.2rem 0.6rem;
+}
