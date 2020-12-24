@@ -1,10 +1,11 @@
-from gensim.models import KeyedVectors
+import json
 from urllib.parse import quote
 
 import requests
+from gensim.models import KeyedVectors
 
-
-URL = "http://10.60.38.173:12001/chineseNER/"
+NER_URL = "http://10.60.38.173:12001/chineseNER/"
+RE_URL = "http://10.60.38.173:12002/re/"
 WORD_VEC_MODEL = KeyedVectors.load("./data/w2v_model.model")
 # WORD_VEC_MODEL = KeyedVectors.load_word2vec_format("./data/added_w2v_model.bin")
 
@@ -23,7 +24,7 @@ def ner_interface(input: str) -> list[dict]:
     entity_entries = None
 
     try:
-        r = requests.get(str().join([URL, quote(input)]))
+        r = requests.get(str().join([NER_URL, quote(input)]))
         data = r.json()
     except requests.RequestException:
         data = []
@@ -61,10 +62,17 @@ def ralations(
     chosen_index: int,
     sentence: str
 ) -> list[str]:
-    # TODO TEST DATA HERE:
-    result = ["关系"] * len(entries)
-    result[chosen_index] = ""
-    return result
+    send_data = {
+        "sentence": sentence,
+        "entities": entries,
+        "chosen_entity": chosen_index
+    }
+    try:
+        r = requests.post(RE_URL, json=send_data)
+        data = r.json()
+    except requests.RequestException:
+        data = [""] * len(entries)
+    return data
 
 
 def process_entity(
