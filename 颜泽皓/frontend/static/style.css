@@ -3,8 +3,8 @@
     --color-second-accent: #eb9f9f;
     --color-accent-background: #f6e6b8;
     --color-background: #f8ecc9;
-    --color-primary: #a79c8e;
-    --color-second-primary: #b8afa4;
+    --color-primary: #89463e;
+    --color-second-primary: #91777e;
     --height-header: 15vh;
     --height-searchbar: 3rem;
     --height-h1: 5rem;
@@ -75,7 +75,7 @@ input[type="text"] {
 }
 
 input[type="text"]::placeholder {
-    color: var(--color-second-primary);
+    color: var(--color-background);
 }
 
 input[type="submit"] {
