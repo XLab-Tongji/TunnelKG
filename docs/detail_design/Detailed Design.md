@@ -8,3 +8,13 @@ Following steps are taken in the construction of our KG: named entity recognitio
 
 The KG constructed by us was initially aimed at tunnel engineering. With the generalization ability of model, we has extended the scope of KG into civil engineering currently.
 
+## Process Flow Design
+
+- Sentence processing process flow
+
+![](./SentenceProcessSequenceDiagram.svg)
+
+- Entity processing process flow
+
+![](./EntityProcessSequenceDiagram.svg)
+
