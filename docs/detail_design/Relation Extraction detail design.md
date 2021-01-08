@@ -329,7 +329,7 @@ The dataset usually includes a relation2id file, which has all kinds of relation
 
 #### Overview
 
-![relationClass](./pic/relationClass.png)
+![relationClass](./image/relationClass.png)
 
 #### torch.nn.Module
 
