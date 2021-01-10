@@ -1,10 +1,10 @@
-### NER(Named Entity Recognition)
+## NER(Named Entity Recognition)
 
-#### Overview
+### Overview
 
 Named-entity recognition (NER) (also known as (named) entity identification, entity chunking, and entity extraction) is a subtask of information extraction that seeks to locate and classify named entities mentioned in unstructured text into pre-defined categories such as person names, organizations, locations, medical codes, time expressions, quantities, monetary values, percentages, etc.
 
-#### Dataset
+### Dataset
 
 The dataset should be arranged in sentence level, and be separated into two files.
 
@@ -72,7 +72,7 @@ The dataset should be arranged in sentence level, and be separated into two file
   O O B_x I_x O O O O B_x I_x I_x I_x I_x O O O O O 
   ```
 
-#### Evalution
+### Evalution
 
 | dataset                   | f1 value | precision |
 | ------------------------- | -------- | --------- |
@@ -80,15 +80,15 @@ The dataset should be arranged in sentence level, and be separated into two file
 | Chinese universal dataset | 0.92     | 0.9       |
 | Chinese tunnel dataset    | 0.5~0.7  | 0.6       |
 
-#### Key Operations
+### Key Operations
 
 In this part, we will just focus on Chinese NER part.
 
-##### data prepare: 
+#### data prepare: 
 
 Use some scripts to transform the original dataset to meet the needs of NER.
 
-##### Tokenization:
+#### Tokenization:
 
 1. split sentence into word tokens
 2. map tokens to numbers
@@ -141,11 +141,11 @@ def read_corpus(train_file_data, train_file_tag, max_length, label_dic):
     return result
 ```
 
-##### Model
+#### Model
 
 The model is based on ALBERT. We mainly introduce `BiLSTMCRF` part here.
 
-![CRF-LAYER-1-v2](.\CRF-LAYER-1-v2.png)
+![CRF-LAYER-1-v2](.\image\CRF-LAYER-1-v2.png)
 
 + **BiLSTM layer:** 
 
@@ -236,104 +236,102 @@ The model is based on ALBERT. We mainly introduce `BiLSTMCRF` part here.
           return score
   ```
 
-3. **Train**
+#### Train
 
-   Set configuration and train the model.
+Set configuration and train the model.
 
-   ```python
-       def train(self):
-           self.model.to(DEVICE)
-           #weight decay是放在正则项（regularization）前面的一个系数，正则项一般指示模型的复杂度，所以weight decay的作用是调节模型复杂度对损失函数的影响，若weight decay很大，则复杂的模型损失函数的值也就大。
-           optimizer = optim.Adam(self.model.parameters(), lr = 0.001, weight_decay=0.0005)
-           '''
-           当网络的评价指标不在提升的时候，可以通过降低网络的学习率来提高网络性能:
-           optimer指的是网络的优化器
-           mode (str) ，可选择‘min’或者‘max’，min表示当监控量停止下降的时候，学习率将减小，max表示当监控量停止上升的时候，学习率将减小。默认值为‘min’
-           factor 学习率每次降低多少，new_lr = old_lr * factor
-           patience=10，容忍网路的性能不提升的次数，高于这个次数就降低学习率
-           verbose（bool） - 如果为True，则为每次更新向stdout输出一条消息。 默认值：False
-           threshold（float） - 测量新最佳值的阈值，仅关注重大变化。 默认值：1e-4
-           cooldown(int)： 冷却时间“，当调整学习率之后，让学习率调整策略冷静一下，让模型再训练一段时间，再重启监测模式。
-           min_lr(float or list):学习率下限，可为 float，或者 list，当有多个参数组时，可用 list 进行设置。
-           eps(float):学习率衰减的最小值，当学习率变化小于 eps 时，则不调整学习率。
-           '''
-           # schedule = ReduceLROnPlateau(optimizer=optimizer, mode='min',factor=0.1,patience=100,verbose=False)
-           total_size = self.train_data.train_dataloader.__len__()
-           for epoch in range(10):
-               index = 0
-               print(sys.getdefaultencoding())
-               for batch in self.train_data.train_dataloader:
-                   self.model.train()
-                   index += 1
-                   self.model.zero_grad()  # 与optimizer.zero_grad()作用一样
-                   batch = tuple(t.to(DEVICE) for t in batch)
-                   b_input_ids, b_input_mask, b_labels, b_out_masks = batch
-   
-                   bert_encode = self.model(b_input_ids, b_input_mask)
-                   loss = self.model.loss_fn(bert_encode=bert_encode, tags=b_labels, output_mask=b_out_masks)
-                   progress = ("#" * int(index * 25 / total_size)).ljust(25)
-                   print("""epoch [{}] |{}| {}/{}\n\tloss {:.2f}""".format(
-                       epoch, progress, index, total_size, loss.item()))
-                   loss.backward()
-                   # torch.nn.utils.clip_grad_norm_(self.model.parameters(),1) #梯度裁剪
-                   optimizer.step()
-                   # schedule.step(loss)
-                   if index % 10 == 0:
-                       self.eval_2()
-                       print("-" * 50)
-           torch.save(self.model.state_dict(), self.model_path + 'params.pkl')
-           self.eval_2()
-           print("-" * 50)
-   ```
-   
-4. **Predict**
+```python
+    def train(self):
+        self.model.to(DEVICE)
+        #weight decay是放在正则项（regularization）前面的一个系数，正则项一般指示模型的复杂度，所以weight decay的作用是调节模型复杂度对损失函数的影响，若weight decay很大，则复杂的模型损失函数的值也就大。
+        optimizer = optim.Adam(self.model.parameters(), lr = 0.001, weight_decay=0.0005)
+        '''
+        当网络的评价指标不在提升的时候，可以通过降低网络的学习率来提高网络性能:
+        optimer指的是网络的优化器
+        mode (str) ，可选择‘min’或者‘max’，min表示当监控量停止下降的时候，学习率将减小，max表示当监控量停止上升的时候，学习率将减小。默认值为‘min’
+        factor 学习率每次降低多少，new_lr = old_lr * factor
+        patience=10，容忍网路的性能不提升的次数，高于这个次数就降低学习率
+        verbose（bool） - 如果为True，则为每次更新向stdout输出一条消息。 默认值：False
+        threshold（float） - 测量新最佳值的阈值，仅关注重大变化。 默认值：1e-4
+        cooldown(int)： 冷却时间“，当调整学习率之后，让学习率调整策略冷静一下，让模型再训练一段时间，再重启监测模式。
+        min_lr(float or list):学习率下限，可为 float，或者 list，当有多个参数组时，可用 list 进行设置。
+        eps(float):学习率衰减的最小值，当学习率变化小于 eps 时，则不调整学习率。
+        '''
+        # schedule = ReduceLROnPlateau(optimizer=optimizer, mode='min',factor=0.1,patience=100,verbose=False)
+        total_size = self.train_data.train_dataloader.__len__()
+        for epoch in range(10):
+            index = 0
+            print(sys.getdefaultencoding())
+            for batch in self.train_data.train_dataloader:
+                self.model.train()
+                index += 1
+                self.model.zero_grad()  # 与optimizer.zero_grad()作用一样
+                batch = tuple(t.to(DEVICE) for t in batch)
+                b_input_ids, b_input_mask, b_labels, b_out_masks = batch
 
-   Get a input string having a sentence, then return the entity.
+                bert_encode = self.model(b_input_ids, b_input_mask)
+                loss = self.model.loss_fn(bert_encode=bert_encode, tags=b_labels, output_mask=b_out_masks)
+                progress = ("#" * int(index * 25 / total_size)).ljust(25)
+                print("""epoch [{}] |{}| {}/{}\n\tloss {:.2f}""".format(
+                    epoch, progress, index, total_size, loss.item()))
+                loss.backward()
+                # torch.nn.utils.clip_grad_norm_(self.model.parameters(),1) #梯度裁剪
+                optimizer.step()
+                # schedule.step(loss)
+                if index % 10 == 0:
+                    self.eval_2()
+                    print("-" * 50)
+        torch.save(self.model.state_dict(), self.model_path + 'params.pkl')
+        self.eval_2()
+        print("-" * 50)
+```
 
-   ```python
-       def predict(self, input_str=""):
-           self.model.eval()  # 取消batchnorm和dropout,用于评估阶段
-           self.model.to(DEVICE)
-           VOCAB = config['albert_vocab_path']  # your path for model and vocab
-           tokenizer = BertTokenizer.from_pretrained(VOCAB)
-           with torch.no_grad():
-               #input_str = input("请输入文本: ")
-               input_ids = tokenizer.encode(input_str,add_special_tokens=True)  # add_spicial_tokens=True，为自动为sentence加上[CLS]和[SEP]
-               input_mask = [1] * len(input_ids)
-               output_mask = [0] + [1] * (len(input_ids) - 2) + [0]  # 用于屏蔽特殊token
-   
-               input_ids_tensor = torch.LongTensor(input_ids).reshape(1, -1)
-               input_mask_tensor = torch.LongTensor(input_mask).reshape(1, -1)
-               output_mask_tensor = torch.LongTensor(output_mask).reshape(1, -1)
-               input_ids_tensor = input_ids_tensor.to(DEVICE)
-               input_mask_tensor = input_mask_tensor.to(DEVICE)
-               output_mask_tensor = output_mask_tensor.to(DEVICE)
-   
-               bert_encode = self.model(input_ids_tensor, input_mask_tensor)
-               predicts = self.model.predict(bert_encode, output_mask_tensor)
-   
-               #print('paths:{}'.format(predicts))
-               entities = []
-               for tag in self.tags:
-                   tags = get_tags(predicts[0], tag, self.model.tag_map)
-                   entities += format_result(tags, input_str, tag)
-               print(entities)
-               return entities
-   ```
+#### Predict
 
-#### Class Design
+Get a input string having a sentence, then return the entity.
 
-#### 
+```python
+    def predict(self, input_str=""):
+        self.model.eval()  # 取消batchnorm和dropout,用于评估阶段
+        self.model.to(DEVICE)
+        VOCAB = config['albert_vocab_path']  # your path for model and vocab
+        tokenizer = BertTokenizer.from_pretrained(VOCAB)
+        with torch.no_grad():
+            #input_str = input("请输入文本: ")
+            input_ids = tokenizer.encode(input_str,add_special_tokens=True)  # add_spicial_tokens=True，为自动为sentence加上[CLS]和[SEP]
+            input_mask = [1] * len(input_ids)
+            output_mask = [0] + [1] * (len(input_ids) - 2) + [0]  # 用于屏蔽特殊token
 
-##### Overview
+            input_ids_tensor = torch.LongTensor(input_ids).reshape(1, -1)
+            input_mask_tensor = torch.LongTensor(input_mask).reshape(1, -1)
+            output_mask_tensor = torch.LongTensor(output_mask).reshape(1, -1)
+            input_ids_tensor = input_ids_tensor.to(DEVICE)
+            input_mask_tensor = input_mask_tensor.to(DEVICE)
+            output_mask_tensor = output_mask_tensor.to(DEVICE)
 
-![](.\NER.png)
+            bert_encode = self.model(input_ids_tensor, input_mask_tensor)
+            predicts = self.model.predict(bert_encode, output_mask_tensor)
 
-##### torch.nn.Module
+            #print('paths:{}'.format(predicts))
+            entities = []
+            for tag in self.tags:
+                tags = get_tags(predicts[0], tag, self.model.tag_map)
+                entities += format_result(tags, input_str, tag)
+            print(entities)
+            return entities
+```
+
+### Class Design
+
+#### Overview
+
+![](.\image\NER.png)
+
+#### torch.nn.Module
 
 A Python library's class, for building layers in neural networks. 
 
-##### NER
+#### NER
 
 The main class in the project, implement NER methods.
 
@@ -401,7 +399,7 @@ The main class in the project, implement NER methods.
    - return:
      - entities: predicted entities
 
-##### DataFormat
+#### DataFormat
 
 A class implementing data formatting
 
@@ -455,42 +453,6 @@ A class implementing data formatting
    + return:
      + DataLoader: class for training
 
-####  Softmax_nn
-
-A class implementing PCNN model's classification layer.
-
-##### constructed function
-
-```python
-def __init__(self, sentence_encoder, num_class, rel2id):
-```
-
-+ parameter:
-  + sentence_encoder: model's encoder, using class PCNNEncoder
-  + num_class: the number of relation's kinds
-  + rel2id: a dictionary of ids and relations
-
-##### methods
-
-1. ```python
-   def infer(self, item):
-   ```
-
-   + parameter
-     + item: a json string that having a sentence and two entities' positions
-   + return
-     + id2rel: the relation prediction
-     + score: the computed probability
-
-2. ```python
-   def forward(self, *args):
-   ```
-
-   + parameter
-     + *args: depend different sentence encoder's needed parameter
-   + return
-     + logits: a list of probability distribution of different relations
-
 #### BiLSTMCRF
 
 A class implement NER models.
@@ -540,7 +502,7 @@ A class implement NER models.
      + output_mask: output of LSTM
    + return:
   + predicts: prediction
-   
+
 2. ```python
        def forward(self, input_ids, attention_mask):
    ```
@@ -550,7 +512,6 @@ A class implement NER models.
      + attention_mask: mask for word_embeddings
    + return
   + output: output of lstm
-   
 
 #### CRF
 
@@ -587,7 +548,7 @@ A class implements CRF layer
      + tags: tags without CLS&SEP
 + return
      + loss: log loss of given input
-   
+
 2. ``` PYTHON
        def get_batch_best_path(self, inputs, output_mask):
    ```
