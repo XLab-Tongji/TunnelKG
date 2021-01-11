@@ -6,23 +6,23 @@ For prerequisites and running steps, see [Prerequisites and Running](#Installati
 
 By opening the [URI provided](#Running) in the browser, a web page like the following will show up.
 
-![image-20210111224629232](.\UI fig\UI blank.png)
+![image-20210111224629232](.\UI blank.png)
 
 The following figure shows all the functions provided by this project.
 
-![image-20210111224117121](.\UI fig\UI.png)
+![image-20210111224117121](.\UI.png)
 
 To start, **type the sentence** you want to process in the search bar shown as below, and hit `Enter` key. (Only Chinese is supported currently)
 
-![image-20210111225024547](.\UI fig\inputbox.png)
+![image-20210111225024547](.\inputbox.png)
 
 Then in the Entity Recognition section you will see the result of NER along with the Most Unrelated Entity. Sentence you just inputted will be echoed here with the entities underlined and labeled with the category it belongs to. (Currently all entity will be labeled with the only category "x".) The Most Unrelated Entity is given at the bottom right corner of the section.
 
-![image-20210111230409588](.\UI fig\NER.png)
+![image-20210111230409588](.\NER.png)
 
 To further process an entity in the sentence, **hover the mouse cursor** over the entity (in the Entity Recognition section). The entity you choose, its related words (with relativity value), and the relation between it and the rest of the entities in the sentence will show up at the right part of the web page.
 
-![image-20210111230959781](.\UI fig\right.png)
+![image-20210111230959781](.\right.png)
 
 ## Prerequisites and Running
 
