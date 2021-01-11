@@ -807,11 +807,11 @@ Get a input string having a sentence, then return the entity.
             return entities
 ```
 
-### 
-
 
 
 ## Class Design
+
+### language model
 
 ![language model class diagram](image/language model class diagram.png)
 
@@ -885,7 +885,7 @@ def __init__(self, sg, min_count, window, size, iter):
 
 
 
-
+### Relation Extraction
 
 ![relationClass](./image/relationClass.png)
 
@@ -1096,6 +1096,8 @@ def __init__(self, root_file)
 
 
 
+
+### NER(Named Entity Recognition)
 
 ![](.\image\NER.png)
 
