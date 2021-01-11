@@ -1113,45 +1113,9 @@ The main class in the project, implement NER methods.
 
 ```python
     def __init__(self, exec_type="train"):
-        self.load_config()
-        self.__init_model(exec_type)
-
-    def __init_model(self, exec_type):
-        if exec_type == "train":
-            self.train_data = DataFormat(batch_size=self.batch_size, max_length=self.max_legnth, data_type='train')
-            self.dev_data = DataFormat(batch_size=16, max_length=self.max_legnth, data_type="dev")
-
-            self.model = BiLSTMCRF(
-                tag_map=self.train_data.tag_map,
-                batch_size=self.batch_size,
-                dropout=self.dropout,
-                embedding_dim=self.embedding_size,
-                hidden_dim=self.hidden_size,
-            )
-            self.restore_model()
-
-        elif exec_type == "eval":
-            self.train_data = DataFormat(batch_size=self.batch_size, max_length=self.max_legnth, data_type='train')
-            self.dev_data = DataFormat(batch_size=16, max_length=self.max_legnth, data_type="dev")
-
-            self.model = BiLSTMCRF(
-                tag_map=self.train_data.tag_map,
-                batch_size=self.batch_size,
-                dropout=self.dropout,
-                embedding_dim=self.embedding_size,
-                hidden_dim=self.hidden_size,
-            )
-            self.restore_model()
-
-
-        elif exec_type == "predict":
-            self.model = BiLSTMCRF(
-                dropout=self.dropout,
-                embedding_dim=self.embedding_size,
-                hidden_dim=self.hidden_size
-            )
-            self.restore_model()
 ```
+   + parameters:
+     + exec_type: type for execution, including train, predict, eval;
 
 **methods**
 
@@ -1181,27 +1145,11 @@ A class implementing data formatting
 
 ```python
     def __init__(self, max_length=100, batch_size=20, data_type='train'):
-        self.index = 0
-        self.input_size = 0
-        self.batch_size = batch_size
-        self.max_length = max_length
-        self.data_type = data_type
-        self.train_data = []
-        self.tag_map = {
-                   'B_x': 0,
-                   'I_x': 1,
-                        'O': 2}
-        base_path = os.path.abspath(os.path.join(os.getcwd(), "../.."))
-        if data_type == "train":
-            self.data_path = base_path + '/data/ner_data/train/'
-        elif data_type == "dev":
-            self.data_path = base_path + "/data/ner_data/dev/"
-        elif data_type == "test":
-            self.data_path = base_path + "/data/ner_data/test/"
-
-        self.read_corpus(self.data_path + 'source.txt', self.data_path + 'target.txt', self.max_length, self.tag_map)
-        self.train_dataloader= self.prepare_batch(self.train_data, self.batch_size)
 ```
+   + parameters:
+     + max_length: max length of sentence
+     + batch_size: size of each batch
+     + data_type: decide which dataset will be used
 
 ##### methods
 
@@ -1245,25 +1193,10 @@ A class implement NER models.
             dropout=1.0,
             embedding_dim=100
     ):
-        super(BiLSTMCRF, self).__init__()
-        self.batch_size = batch_size
-        self.hidden_dim = hidden_dim
-        self.embedding_dim = embedding_dim
-        self.dropout = dropout
-
-        self.tag_size = len(tag_map)  # 标签个数
-        self.tag_map = tag_map
-
-        bert_config = BertConfig.from_pretrained(str(config['albert_config_path']), share_type='all')
-        self.word_embeddings = BertModel.from_pretrained(config['bert_dir'], config=bert_config)
-        self.word_embeddings.to(DEVICE)
-        self.word_embeddings.eval()
-
-        self.lstm = nn.LSTM(self.embedding_dim, self.hidden_dim // 2,
-                            num_layers=1, bidirectional=True, batch_first=True, dropout=self.dropout)
-        self.hidden2tag = nn.Linear(self.hidden_dim, self.tag_size)
-        self.crf = CRF(self.tag_size)
 ```
+   + parameters:
+     + tag_map: tags
+     + others: model parameters
 
 ##### methods
 
@@ -1297,20 +1230,9 @@ A class implements CRF layer
 
 ``` python
     def __init__(self, num_tag):
-        if num_tag <= 0:
-            raise ValueError("Invalid value of num_tag: %d" % num_tag)
-        super(CRF, self).__init__()
-        self.num_tag = num_tag
-        self.start_tag = num_tag
-        self.end_tag = num_tag + 1
-        # 转移矩阵transitions：P_jk 表示从tag_j到tag_k的概率
-        # P_j* 表示所有从tag_j出发的边
-        # P_*k 表示所有到tag_k的边
-        self.transitions = nn.Parameter(torch.Tensor(num_tag + 2, num_tag + 2))
-        nn.init.uniform_(self.transitions, -0.1, 0.1)
-        self.transitions.data[self.end_tag, :] = -10000   # 表示从EOS->其他标签为不可能事件, 如果发生，则产生一个极大的损失
-        self.transitions.data[:, self.start_tag] = -10000   # 表示从其他标签->SOS为不可能事件, 同上
 ```
+   + parameter
+     + num_tag: number of tags
 
 ##### methods 
 
